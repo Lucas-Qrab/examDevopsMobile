@@ -23,9 +23,13 @@ Pour lancer l'application il faut obligatoirement un smartphone comptabile en mo
 ## Build du projet
 
 Pour build le projet rendez vous dans le terminal ou vous lancerais la commande suivante 
-flutter build apk 
+flutter build apk.
+
+L'apk ce trouve maintenant a cette adresse : build/app/outputs/flutter-apk
+sous le nom app-relase.apk sauf si vous avez modifier le nom de votre application en quel cas il portera un autre nom.
+
 
 ## deploiement 
 
-Pour deployer l'application renedez vous sur le repository du projet et suivez les instructions dans github actions. 
+Pour deployer l'application rendez-vous sur le repository du projet et suivez les instructions dans github actions. 
 
