@@ -30,9 +30,6 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
-      - name: Copy APK to Server
-        uses: appleboy/scp-action@master
-
         # Récupération du dernier sdk flutter stable
         # Possibilité de changer la version du sdk au besoin 
       - name: install sdk
