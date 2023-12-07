@@ -1,7 +1,5 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
+# ce workflow permet le deploiement d'un apk flutter android sur un server via une connexion ssh 
+
 
 name: Dart deploy to server
 
@@ -37,7 +35,8 @@ jobs:
 
         # Récupération du dernier sdk flutter stable
         # Possibilité de changer la version du sdk au besoin 
-      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+      - name: install sdk
+        uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
 
         # Installation des dépendances 
       - name: Install dependencies
