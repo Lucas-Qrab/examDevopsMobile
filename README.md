@@ -1,16 +1,31 @@
 # exam_devops
 
-A new Flutter project.
+Application flutter mobile exam_devops Lucas barq
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+pour commencer clonner le projet sur un appareil via la commande :
+git clone https://github.com/Lucas-Qrab/examDevopsMobile
 
-A few resources to get you started if this is your first Flutter project:
+## Installation de flutter 
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Commencer par installer flutter, rendez-vous sur https://docs.flutter.dev/get-started/install?gclid=CjwKCAiA98WrBhAYEiwA2WvhOgDdKMEF0yV5HErZDuUVpcVGA3KrMCIV1l-qLnFl3sPSbJ3JBoF2ThoCh_QQAvD_BwE&gclsrc=aw.ds 
+et suiver les instructions.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## installation de android studio et du sdk
+
+Rendez-vous sur la doc et suivre les instructions pour récupérer le sdk.
+
+## lancement du projet
+
+Pour lancer l'application il faut obligatoirement un smartphone comptabile en mode debug brancher a l'ordinateur ou un emulateur android installer. Une fois sur que cette condition est remplie celon votre editeur de code il suffit de lancer l'application en mode debug.
+
+## Build du projet
+
+Pour build le projet rendez vous dans le terminal ou vous lancerais la commande suivante 
+flutter build apk 
+
+## deploiement 
+
+Pour deployer l'application renedez vous sur le repository du projet et suivez les instructions dans github actions. 
+
