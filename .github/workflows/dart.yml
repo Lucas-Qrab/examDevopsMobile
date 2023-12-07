@@ -1,0 +1,56 @@
+# ce workflow permet le deploiement d'un apk flutter android sur un server via une connexion ssh 
+
+
+name: Dart deploy to server
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+        # Permet de selectionner le depo utilisé 
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        # Installation et setup de flutter
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'  # Changer selon la version de Flutter utiliser
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+
+        # Récupération du dernier sdk flutter stable
+        # Possibilité de changer la version du sdk au besoin 
+      - name: install sdk
+        uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+
+        # Installation des dépendances 
+      - name: Install dependencies
+        run: dart pub get
+
+        # Build de l'apk 
+      - name: Build APK
+        run: flutter build apk
+
+      # Déploiement de l'apk sur le server  
+      - name: Deploy to Server
+        run: |
+          timestamp=$(date +"%d-%m-%Y-%H-%M-%S" --date='+1 hour')
+          folder_name="deploy_at_$timestamp"
+          
+          # on créer un dossier pour recevoir le deploiement 
+          ssh -T -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.REMOTE_HOST }} -p 22 "mkdir ~/mobile/$folder_name"
+          
+          # Deploiement du fichier apk
+          scp -P 22 -r -i ~/.ssh/id_rsa build/app/outputs/flutter-apk/app-release.apk ${{ secrets.SERVER_USERNAME }}@${{ secrets.REMOTE_HOST }}:~/mobile/$folder_name
