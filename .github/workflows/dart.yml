@@ -1,0 +1,63 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Dart deploy to server
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+        # Permet de selectionner le depo utilisé 
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        # Installation et setup de flutter
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'  # Changer selon la version de Flutter utiliser
+
+      - name: Copy APK to Server
+        uses: appleboy/scp-action@master
+
+        # Récupération du dernier sdk flutter stable
+        # Possibilité de changer la version du sdk au besoin 
+      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+
+        # Installation des dépendances 
+      - name: Install dependencies
+        run: dart pub get
+
+        # Build de l'apk 
+      - name: Build APK
+        run: flutter build apk
+
+        # Déploiement de l'apk sur le server
+    
+  deploy:
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+      - name: Install SSH Key
+        uses: webfactory/ssh-agent@v0.5.5
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+      - name: Deploy to Server
+        run: |
+          # Creation du dossier pour stocker l'apk sur le server
+          timestamp=$(date +"%Y%m%d%H%M%S")
+          folder_name="deploy_$timestamp"
+          ssh -T -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.secrets.SERVER_USERNAME }}@${{ secrets.REMOTE_HOST }} -p 22 "mkdir ~/mobile/$folder_name"
+          # Deploiement du fichier apk
+          scp -P 22 -i ~/.ssh/id_rsa build/* -o StrictHostKeyChecking=no -r build/app/outputs/flutter-apk/app-release.apk ${{ secrets.SERVER_USERNAME }}@${{ secrets.REMOTE_HOST }}:/mobile/$folder_name
