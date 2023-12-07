@@ -51,8 +51,8 @@ jobs:
       - name: Deploy to Server
         run: |
           # Creation du dossier pour stocker l'apk sur le server
-          timestamp=$(date +"%Y%m%d%H%M%S")
+          timestamp=$(date +"%d-%m-%Y-%H-%M-%S" --date='+1 hour')
           folder_name="deploy_$timestamp"
           ssh -T -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.secrets.SERVER_USERNAME }}@${{ secrets.REMOTE_HOST }} -p 22 "mkdir ~/mobile/$folder_name"
           # Deploiement du fichier apk
-          scp -P 22 -i ~/.ssh/id_rsa build/* -o StrictHostKeyChecking=no -r build/app/outputs/flutter-apk/app-release.apk ${{ secrets.SERVER_USERNAME }}@${{ secrets.REMOTE_HOST }}:/mobile/$folder_name
+          scp -P 22 -r -i ~/.ssh/id_rsa build/app/outputs/flutter-apk/app-release.apk ${{ secrets.SERVER_USERNAME }}@${{ secrets.REMOTE_HOST }}:/mobile/$folder_name
